@@ -22,10 +22,10 @@ model Country {
   fifa_name   String?
 
   //relations
-  Language Language[]
-  Border   Border[]
-  Region   Region     @relation(fields: [regionId], references: [id])
-  regionId Int
+  languages Language[]
+  borders   Border[]
+  region    Region     @relation(fields: [regionId], references: [id])
+  regionId  Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,7 +33,7 @@ model Country {
 
 model Language {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   country   Country  @relation(fields: [countryId], references: [id])
   countryId Int
   createdAt DateTime @default(now())
@@ -51,7 +51,7 @@ model Border {
 
 model Region {
   id        Int       @id @default(autoincrement())
-  name      String
+  name      String    @unique
   country   Country[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
