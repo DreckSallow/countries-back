@@ -22,37 +22,53 @@ model Country {
   fifa_name   String?
 
   //relations
-  Language Language[]
-  Border   Border[]
-  Region   Region     @relation(fields: [regionId], references: [id])
-  regionId Int
+  borders   BordersOnCountry[]
+  languages LanguagesOnCountry[]
+  region    Region               @relation(fields: [regionId], references: [id])
+  regionId  Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Language {
-  id        Int      @id @default(autoincrement())
-  name      String
-  country   Country  @relation(fields: [countryId], references: [id])
-  countryId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int                  @id @default(autoincrement())
+  name      String               @unique
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  countries LanguagesOnCountry[]
 }
 
 model Border {
-  id        Int      @id @default(autoincrement())
-  initials  String   @unique
-  country   Country  @relation(fields: [countryId], references: [id])
-  countryId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int                @id @default(autoincrement())
+  initials  String             @unique
+  countries BordersOnCountry[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 }
 
 model Region {
   id        Int       @id @default(autoincrement())
-  name      String
+  name      String    @unique
   country   Country[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+model LanguagesOnCountry {
+  country    Country  @relation(fields: [countryId], references: [id])
+  countryId  Int
+  language   Language @relation(fields: [languageId], references: [id])
+  languageId Int
+
+  @@id([countryId, languageId])
+}
+
+model BordersOnCountry {
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId Int
+  border    Border  @relation(fields: [borderId], references: [id])
+  borderId  Int
+
+  @@id([countryId, borderId])
 }
