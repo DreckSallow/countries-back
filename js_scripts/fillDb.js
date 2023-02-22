@@ -12,22 +12,30 @@ const prisma = new PrismaClient();
 
 const getLanguages = (obj) => {
   return Object.values(obj).map((language) => ({
-    where: {
-      name: language,
-    },
-    create: {
-      name: language,
+    language: {
+      connectOrCreate: {
+        where: {
+          name: language,
+        },
+        create: {
+          name: language,
+        },
+      },
     },
   }));
 };
 
 const getBorders = (borders) => {
   return borders.map((border) => ({
-    where: {
-      initials: border,
-    },
-    create: {
-      initials: border,
+    border: {
+      connectOrCreate: {
+        where: {
+          initials: border,
+        },
+        create: {
+          initials: border,
+        },
+      },
     },
   }));
 };
@@ -53,11 +61,11 @@ const createCountry = async (country) => {
           },
         },
       },
-      languages: {
-        connectOrCreate: getLanguages(country["languages"] ?? {}),
-      },
       borders: {
-        connectOrCreate: getBorders(country["borders"] ?? []),
+        create: getBorders(country["borders"] ?? []),
+      },
+      languages: {
+        create: getLanguages(country["languages"] ?? {}),
       },
     },
   });
