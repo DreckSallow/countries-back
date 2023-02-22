@@ -8,6 +8,7 @@ import {
 } from "./controllers/country/controller";
 import typeDefs from "./graphQl/index";
 import { getAllLanguages } from "./controllers/language/controller";
+import { Config } from "./config";
 
 const server = new ApolloServer({
 	typeDefs,
@@ -27,11 +28,11 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
 	listen: {
-		port: 3000,
+		port: Config.server.PORT,
 	},
 })
 	.then((res) => {
-		console.log("Server running at: ", res.url);
+		console.log("Server running on the port: ", Config.server.PORT);
 	})
 	.catch((err) => {
 		console.log(err);
